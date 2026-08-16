@@ -97,3 +97,26 @@
 .ia-timeline-body{padding-top:2px}
 .ia-timeline-body strong{display:block;font-size:13px;margin-bottom:1px}
 .ia-timeline-body span{font-size:12px;color:var(--text-400)}
+
+/* ============================================================
+   BOTÃO FLUTUANTE "LIMPAR BUSCA"
+   Fixo no canto inferior esquerdo, acompanha o scroll. Só existe
+   no DOM visível quando há resultado (controlado por [hidden]).
+   ============================================================ */
+.ia-clear-btn{
+  position:fixed;left:24px;bottom:24px;z-index:70;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 20px;border-radius:var(--radius-pill);
+  background:var(--surface);color:var(--purple-700);
+  border:1.5px solid var(--border-soft);
+  font-size:13.5px;font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  transition:transform .15s var(--ease),box-shadow .15s var(--ease),border-color .15s var(--ease);
+  animation:fadeUp .25s var(--ease);
+}
+.ia-clear-btn:hover{
+  border-color:var(--purple-700);
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(0,0,0,.24);
+}
+.ia-clear-btn svg{width:15px;height:15px}

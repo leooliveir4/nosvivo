@@ -1,11 +1,16 @@
 /* ============================================================
    TELA 1 · LOGIN — VALIDAÇÃO E AUTENTICAÇÃO
+   ------------------------------------------------------------
+   Cada conta carrega um papel (RBAC):
+     ADMIN → acesso total, incluindo o Painel gestor
+     USER  → leitura geral + edição apenas do que é seu
    ============================================================ */
+const EMAIL_DOMAIN = 'nosvivo.com.br';
 const USERS=[
-  {email:'leonardo.silva@vivo.com.br',password:'Vivo@2026'},
-  {email:'marina.torres@vivo.com.br',password:'Vivo@2026'},
+  {email:'leonardo.silva@nosvivo.com.br',password:'Vivo@2026',role:'ADMIN'},
+  {email:'marina.torres@nosvivo.com.br',password:'Vivo@2026',role:'USER'},
 ];
-function isValidEmail(v){return /^[^\s@]+@vivo\.com\.br$/i.test(v.trim());}
+function isValidEmail(v){ return /^[^\s@]+@nosvivo\.com\.br$/i.test(v.trim()); }
 function isValidPassword(v){return v.length>=6;}
 
 function setFieldError(fieldId,hasError){
@@ -64,7 +69,7 @@ document.getElementById('login-form').addEventListener('submit',(e)=>{
       return;
     }
     showToast('Login realizado com sucesso');
-    setTimeout(()=>enterApp(account.email),650);
+    setTimeout(()=>enterApp(account.email, account.role),650);
   },850);
 });
 document.getElementById('link-forgot').addEventListener('click',(e)=>{e.preventDefault();showToast('Fluxo de recuperação de senha simulado');});

@@ -8,7 +8,6 @@ function projCard(pr){
   const person=PEOPLE.find(p=>p.name===pr.author);
   return `<div class="proj-card" data-title="${pr.title}" tabindex="0" role="button" aria-label="Ver detalhes do projeto ${pr.title}">
     <h3>${pr.title}</h3>
-    <p class="proj-problem"><b>Problema resolvido:</b> ${pr.problem}</p>
     <div class="proj-stack">${pr.stack.map(s=>`<span class="tag-pill">${s}</span>`).join('')}${pr.rules.map(r=>`<span class="tag-pill tone-magenta">${r}</span>`).join('')}</div>
     <div class="proj-foot">
       <div class="proj-author"><div class="avatar" style="background:${person?person.color:'#660099'};width:26px;height:26px;font-size:9.5px">${person?person.initials:'??'}</div><span>${pr.author}</span></div>
@@ -28,6 +27,8 @@ function removeProject(title){
   });
 }
 function renderProjects(){
+  // mantém o KPI do Painel gestor em sincronia com o repositório
+  if(typeof renderProjectsKPI === 'function') renderProjectsKPI();
   let list=PROJECTS.filter(p=>!removedProjects.has(p.title));
   list=list.filter(p=>activeStack==='all'||p.stack.includes(activeStack));
   if(projQuery){
@@ -161,22 +162,31 @@ document.getElementById('new-project-form').addEventListener('submit',(e)=>{
   e.preventDefault();
   const title=document.getElementById('np-title').value.trim();
   const problem=document.getElementById('np-problem').value.trim();
-  const titleOk=title.length>0;
-  const problemOk=problem.length>0;
-  setFieldError('np-field-title',!titleOk);
-  setFieldError('np-field-problem',!problemOk);
-  if(!titleOk){ document.getElementById('np-title').focus(); return; }
-  if(!problemOk){ document.getElementById('np-problem').focus(); return; }
-
   const stack=chipValues('np-chips-stack');
   const rules=chipValues('np-chips-rules');
   const fileNames=[...document.querySelectorAll('#np-upload-list .fname')].map(el=>el.textContent);
-  const me = getCurrentPerson();
 
+  /* todos os campos são obrigatórios — o submit fica bloqueado
+     enquanto houver qualquer um vazio */
+  const checks = [
+    ['np-field-title',   title.length>0,   ()=>document.getElementById('np-title').focus()],
+    ['np-field-problem', problem.length>0, ()=>document.getElementById('np-problem').focus()],
+    ['np-field-stack',   stack.length>0,   ()=>document.getElementById('np-in-stack').focus()],
+    ['np-field-rules',   rules.length>0,   ()=>document.getElementById('np-in-rules').focus()],
+    ['np-field-files',   fileNames.length>0, ()=>document.getElementById('np-upload-zone').focus()],
+  ];
+  checks.forEach(([fieldId, valid])=>setFieldError(fieldId, !valid));
+  const firstInvalid = checks.find(([,valid])=>!valid);
+  if(firstInvalid){
+    firstInvalid[2]();
+    showToast('Preencha todos os campos para cadastrar a solução');
+    return;
+  }
+
+  const me = getCurrentPerson();
   PROJECTS.unshift({
     title, author: me ? me.name : 'Você', problem,
-    stack: stack.length?stack:['A definir'],
-    rules: rules.length?rules:[],
+    stack, rules,
     files: fileNames.length, fileNames
   });
   closeNewProjectModal();

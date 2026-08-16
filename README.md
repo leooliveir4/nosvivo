@@ -1,10 +1,8 @@
-# NÓsVivo — Rede de Conhecimento Vivo
+# NÓsVivo — Rede de Conhecimento
 
 > **O conhecimento certo, com a pessoa certa, no momento certo.**
 
-Protótipo funcional de uma plataforma corporativa de mapeamento de capital intelectual para a Vivo (Telefônica Brasil). O objetivo é reduzir o tempo que um colaborador leva para encontrar quem já resolveu o problema que ele tem agora, e expor à gestão onde o conhecimento está perigosamente concentrado.
-
-Desenvolvido para a área de **Garantia de Receita / Controle de Gestão**.
+Protótipo funcional de uma plataforma corporativa de mapeamento de capital intelectual. O objetivo é reduzir o tempo que um colaborador leva para encontrar quem já resolveu o problema que ele tem agora, e expor à gestão onde o conhecimento está perigosamente concentrado.
 
 ---
 
@@ -14,9 +12,11 @@ Desenvolvido para a área de **Garantia de Receita / Controle de Gestão**.
 - [Como rodar](#como-rodar)
 - [Credenciais de demonstração](#credenciais-de-demonstração)
 - [Telas](#telas)
+- [Controle de acesso (RBAC)](#controle-de-acesso-rbac)
 - [NÓsVivo IA](#nósvivo-ia)
 - [Arquitetura de pastas](#arquitetura-de-pastas)
 - [Design system e temas](#design-system-e-temas)
+- [Perfil, privacidade e disponibilidade](#perfil-privacidade-e-disponibilidade)
 - [Persistência de dados](#persistência-de-dados)
 - [Testes](#testes)
 - [Roteiro de demonstração](#roteiro-de-demonstração-hackathon)
@@ -27,7 +27,7 @@ Desenvolvido para a área de **Garantia de Receita / Controle de Gestão**.
 
 ## O problema
 
-Em uma operação do tamanho da Vivo, o conhecimento técnico e de negócio fica disperso: alguém já construiu o robô de conciliação que você precisa, alguém já auditou aquela regra de billing, alguém já integrou aquele sistema. Sem um mapa, esse conhecimento é redescoberto do zero — ou pior, some quando a pessoa sai.
+Em uma operação de grande porte, o conhecimento técnico e de negócio fica disperso: alguém já construiu o robô de conciliação que você precisa, alguém já auditou aquela regra de billing, alguém já integrou aquele sistema. Sem um mapa, esse conhecimento é redescoberto do zero — ou pior, some quando a pessoa sai.
 
 O NÓsVivo ataca dois indicadores:
 
@@ -69,12 +69,12 @@ Servindo por HTTP, o motor da IA passa a ler o vocabulário de `data/knowledge-b
 
 Dois usuários, para demonstrar troca de conta e isolamento de perfis:
 
-| E-mail | Senha |
-|---|---|
-| `leonardo.silva@vivo.com.br` | `Vivo@2026` |
-| `marina.torres@vivo.com.br` | `Vivo@2026` |
+| E-mail | Senha | Papel |
+|---|---|---|
+| `leonardo.silva@nosvivo.com.br` | `Vivo@2026` | **ADMIN** (gestor) |
+| `marina.torres@nosvivo.com.br` | `Vivo@2026` | **USER** (colaborador) |
 
-A validação distingue os erros: e-mail fora do domínio `@vivo.com.br`, e-mail não cadastrado e **senha incorreta** têm mensagens diferentes.
+A validação distingue os erros: e-mail fora do domínio `@nosvivo.com.br`, e-mail não cadastrado e **senha incorreta** têm mensagens diferentes.
 
 ---
 
@@ -82,15 +82,31 @@ A validação distingue os erros: e-mail fora do domínio `@vivo.com.br`, e-mail
 
 A navegação principal é composta por ícones (com tooltip), na seguinte ordem:
 
-| Ícone | Tela | O que faz |
-|---|---|---|
-| ✦ | **NÓsVivo IA** | Recebe seu objetivo de desenvolvimento e encontra quem pode te ajudar |
-| 👤 | **Meu perfil** | Cadastro e edição do seu mapa de competências |
-| 🏠 | **Central de colaboradores** | Busca de especialistas por hierarquia e por tags |
-| ▦ | **Projetos & soluções** | Repositório de automações, scripts e sistemas já construídos |
-| 📊 | **Painel gestor** | KPIs, mapa de calor de competências e alertas de concentração |
+| Ícone | Tela | O que faz | Acesso |
+|---|---|---|---|
+| ✦ | **NÓsVivo IA** | Recebe seu objetivo de desenvolvimento e encontra quem pode te ajudar | Todos |
+| 🏠 | **Central de colaboradores** | Busca de especialistas por hierarquia e por tags | Todos |
+| ▦ | **Projetos & soluções** | Repositório de automações, scripts e sistemas já construídos | Todos |
+| 📊 | **Painel gestor** | KPIs, mapa de calor de competências e alertas de concentração | Somente ADMIN |
 
-A tela de **login** fica fora da navegação: é a porta de entrada. Ao autenticar, a barra aparece e o usuário é levado ao perfil. O logout está no menu do avatar, no canto superior direito.
+**Menu do avatar** (canto superior direito) reúne o que é pessoal, nesta ordem: **Meu perfil**, **Configurações**, alternador de **tema** (no celular) e **Sair**.
+
+A tela de **login** fica fora da navegação: é a porta de entrada. Ao autenticar, a barra aparece e o usuário é levado ao próprio perfil.
+
+---
+
+## Controle de acesso (RBAC)
+
+Cada conta carrega um papel, definido em `js/features/auth.js`:
+
+| Papel | Pode |
+|---|---|
+| **USER** | Ler todo o catálogo de pessoas e projetos; editar apenas o próprio perfil e os próprios projetos. **Não enxerga o Painel gestor** — a aba nem é renderizada. |
+| **ADMIN** | Tudo que o USER faz, mais o **Painel gestor** com os indicadores gerenciais. |
+
+A restrição é aplicada em duas camadas: a aba é escondida (`applyRoleVisibility`) e a própria navegação recusa o destino (`goToTela` verifica `canAccess`), então nem forçando a troca de tela um USER entra no painel.
+
+> Como todo o protótipo roda no navegador, esse controle é de **experiência**, não de segurança. Em produção a checagem precisa acontecer no servidor.
 
 ---
 
@@ -200,7 +216,7 @@ A separação de responsabilidades é real; apenas o mecanismo de carregamento �
 
 Toda cor, raio, sombra e fonte vem de variáveis CSS em `01-tokens.css`. Nenhum componente define cor própria — é o que torna o tema escuro viável sem duplicar folha de estilo.
 
-**Paleta Vivo:** roxo `#660099` (primária), magenta `#EB0029` (destaque), neutros `#F5F5F7` / `#222222`.
+**Paleta:** roxo `#660099` (primária), magenta `#EB0029` (destaque), neutros `#F5F5F7` / `#222222`.
 **Tipografia:** Sora (títulos), Inter (corpo), IBM Plex Mono (dados e códigos).
 
 ### Tema claro / escuro
@@ -231,9 +247,35 @@ Testado em desktop e celular. Breakpoints:
 |---|---|
 | ≤1180px | Grids de 3 → 2 colunas |
 | ≤980px | Login e sidebar de filtros empilham |
-| ≤720px | Coluna única; topbar compacta; alternador de tema migra para o menu do perfil; rótulos do stepper ocultos; rodapé da IA empilha |
-| ≤400px | Abas e avatar reduzidos para caber em aparelhos estreitos |
+| ≤720px | Coluna única; topbar compacta; alternador de tema migra para o menu do perfil; rótulos do stepper ocultos; rodapé da IA empilha; interruptor de privacidade abaixo do texto; botão *Limpar busca* recolhido às margens |
+| ≤400px | Abas e avatar reduzidos; KPIs em coluna única |
 | Sem mouse | Tooltips desativados (evita `:hover` grudado em telas de toque) |
+
+---
+
+## Perfil, privacidade e disponibilidade
+
+O perfil vive no menu do avatar e tem duas seções:
+
+**Perfil** — modo de visualização (igual ao que os outros veem) com botão *Editar perfil* que reabre o formulário de 4 etapas.
+
+**Configurações → Privacidade** — um interruptor liga/desliga controla sua **flag de disponibilidade**:
+
+| Estado | Como aparece | Texto ao passar o cursor |
+|---|---|---|
+| Ativa | 🟢 Agenda disponível | *Agende dentro do meu horário de trabalho quando houver disponibilidade.* |
+| Inativa | 🔴 Agenda indisponível | *No momento, estou indisponível para reuniões; entre em contato por mensagem pelo e-mail ou pelo Teams.* |
+
+A flag aparece em três lugares, sempre a partir do mesmo dado: no seu perfil, nos cards da Central de colaboradores (em versão compacta) e no modal de perfil detalhado. A escolha é gravada junto do perfil, então persiste entre sessões.
+
+### Taxonomia de tags
+
+Competências e projetos usam o **mesmo código de cores** em todo o sistema:
+
+- **Roxo** — tecnologias e ferramentas (Python, SQL, Power BI…)
+- **Magenta** — regras de negócio e domínio (Cobrança, Auditoria de Receita…)
+
+A classificação é centralizada em `tagPillsHTML()` (`js/features/profile.js`), que consulta a lista `TECH_TAGS`. Qualquer tela que renderize tags herda o padrão automaticamente.
 
 ---
 
@@ -260,21 +302,22 @@ npm install jsdom
 node tests/smoke-test.js
 ```
 
-**Cobertura (33 verificações):** carregamento dos arquivos separados · alternância de tema, ícone, `aria-pressed` e persistência · login com senha incorreta e com sucesso · salvamento e releitura do perfil · fluxo completo da IA incluindo o novo gap · renderização de hub, projetos e mapa de calor · troca entre os dois usuários com isolamento de perfil · ausência de erros de JavaScript.
+**Cobertura (48 verificações):** estrutura dos arquivos separados · RBAC nos dois papéis (aba oculta e navegação bloqueada) · login com senha incorreta e com sucesso · perfil salvo e relido · privacidade e flag de disponibilidade nos três pontos de exibição · taxonomia de tags por cor · projetos sem descrição no card e com todos os campos obrigatórios · KPI de projetos reagindo a remoção · fluxo completo da IA, do estado idle ao limpar busca · ausência de erros de JavaScript.
 
 ---
 
 ## Roteiro de demonstração (hackathon)
 
 1. Abrir na tela de login e **alternar para o tema escuro** (mostra o cuidado com o produto)
-2. Entrar como `leonardo.silva@vivo.com.br`
+2. Entrar como `leonardo.silva@nosvivo.com.br` (gestor)
 3. Preencher o perfil — competências, escopo, contato
 4. Ir para **NÓsVivo IA** e escrever: *"Quero aprender Python e Big Data para trabalhar com projetos reais."*
 5. A IA identifica **Python + SQL + AWS**, encontra o especialista mais compatível e **explica por quê**
 6. Conectar → o sistema sugere uma conversa de 30 minutos com tema específico
 7. Registrar o que aprendeu → a IA identifica um **novo gap** e recomenda outra pessoa
-8. Mostrar o **Painel gestor**: alertas de conhecimento concentrado em uma só pessoa
-9. Sair e entrar como `marina.torres@vivo.com.br` — perfil e projetos totalmente diferentes
+8. Mostrar o **Painel gestor**: KPI de projetos compartilhados e alertas de conhecimento concentrado em uma só pessoa
+9. Sair e entrar como `marina.torres@nosvivo.com.br` — perfil próprio e **sem acesso ao Painel gestor** (a aba desaparece)
+10. Em *Configurações → Privacidade*, desligar a disponibilidade e mostrar a flag mudando de verde para vermelho na Central de colaboradores
 
 **A frase que fecha:** *eu digo o que quero aprender → o sistema entende → encontra quem pode me ensinar → eu me conecto → aprendo → ele me mostra o próximo passo.*
 
@@ -286,7 +329,7 @@ Registro das mudanças solicitadas ao longo do desenvolvimento, em ordem cronol�
 
 ### 1. Estrutura inicial
 - Seis telas construídas como **abas de navegação** de um site único, não como páginas isoladas
-- Identidade visual Vivo aplicada (roxo, magenta, neutros) com design responsivo
+- Identidade visual aplicada (roxo, magenta, neutros) com design responsivo
 
 ### 2. Projetos, perfil e navegação
 - Opção de **remover** projetos, com confirmação por toast e ação de **desfazer**
@@ -352,16 +395,29 @@ Registro das mudanças solicitadas ao longo do desenvolvimento, em ordem cronol�
 
 ---
 
+### 10. RBAC, privacidade e refinamentos
+
+- **Controle de acesso por papel (RBAC)**: conta de gestor (ADMIN) e de colaborador (USER); o Painel gestor fica indisponível para USER, com a aba oculta e a navegação bloqueada
+- **Perfil movido para o menu do avatar**, junto com a nova aba **Configurações**, acima do "Sair"
+- **Configurações → Privacidade** com interruptor de disponibilidade de agenda, refletido no perfil, nos cards e no modal, com as mensagens explicativas ao passar o cursor
+- **Tags por cor** unificadas: tecnologia em roxo, regra de negócio em magenta, em todas as telas
+- **Projetos**: a descrição saiu do card e passou a aparecer só no modal de detalhe; todos os campos do cadastro viraram obrigatórios, com erro visual por campo e submit bloqueado
+- **Painel gestor**: novo KPI de **projetos compartilhados** com contagem em tempo real, que sobe e desce conforme soluções são cadastradas ou removidas
+- **NÓsVivo IA**: corrigido o loading que aparecia antes mesmo da busca (o atributo `hidden` estava sendo vencido pelo `display:flex` do componente); adicionado botão flutuante **Limpar busca**, que só existe quando há resultado, acompanha o scroll e some ao ser usado
+- Domínio dos e-mails de demonstração passou a ser o do próprio site
+
+---
+
 ## Limitações conhecidas
 
 Transparência sobre o que é protótipo e o que seria necessário em produção:
 
 - **Não há IA real.** O matching é determinístico e local — ver [NÓsVivo IA](#nósvivo-ia).
 - **Não há backend.** Dados de pessoas e projetos são mock em arquivos JavaScript; a persistência é local ao navegador. Sair do dispositivo significa perder os dados.
-- **Autenticação é simulada.** As credenciais estão no código-fonte. Em produção isso seria SSO corporativo com validação no servidor.
+- **Autenticação e RBAC são simulados.** As credenciais e os papéis estão no código-fonte e a checagem roda no navegador. Em produção isso seria SSO corporativo com autorização validada no servidor.
 - **Upload de arquivos é simulado.** Os anexos aparecem na interface, mas nenhum arquivo é realmente enviado ou armazenado.
 - **Os KPIs do Painel gestor são ilustrativos**, não calculados a partir dos dados reais da aplicação.
 
 ---
 
-*Protótipo interno · Vivo (Telefônica Brasil) · Garantia de Receita — Controle de Gestão*
+*Protótipo interno · NÓsVivo*

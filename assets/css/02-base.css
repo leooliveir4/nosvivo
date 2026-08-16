@@ -8,6 +8,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 ul{list-style:none}
 a{color:inherit;text-decoration:none}
+/* o atributo hidden precisa vencer os display:flex/grid dos componentes,
+   senão blocos marcados como ocultos (ex.: loading da IA) aparecem */
+[hidden]{display:none !important}
 
 /* ============================================================
    2. SPRITE DE ÍCONES (traço 1.75, cantos arredondados)

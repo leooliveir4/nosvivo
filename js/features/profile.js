@@ -18,6 +18,47 @@ const DIR_KEY_MAP = {
 };
 const TECH_TAGS = ['Python','SQL','Power BI','AWS','API/Integrações','SAP','VBA/Macros','Azure','RPA (UiPath)','Excel Avançado','Qlik Sense','R'];
 
+/* ------------------------------------------------------------
+   Taxonomia de tags — mesmo código de cores usado nos projetos:
+   tecnologia = roxo (padrão), regra de negócio = magenta
+   ------------------------------------------------------------ */
+function isTechTag(tag){ return TECH_TAGS.includes(tag); }
+function tagPillHTML(tag){
+  return `<span class="tag-pill${isTechTag(tag) ? '' : ' tone-magenta'}">${tag}</span>`;
+}
+function tagPillsHTML(tags){ return (tags||[]).map(tagPillHTML).join(''); }
+
+/* ------------------------------------------------------------
+   Disponibilidade (flag de agenda)
+   ------------------------------------------------------------ */
+const AVAILABILITY = {
+  available: {
+    label:'Agenda disponível',
+    tooltip:'Agende dentro do meu horário de trabalho quando houver disponibilidade.',
+    cls:'is-available',
+    icon:'#i-calendar-check',
+  },
+  busy: {
+    label:'Agenda indisponível',
+    tooltip:'No momento, estou indisponível para reuniões; entre em contato por mensagem pelo e-mail ou pelo Teams.',
+    cls:'is-busy',
+    icon:'#i-calendar-off',
+  },
+};
+function availabilityOf(person){
+  return (person && person.available === false) ? AVAILABILITY.busy : AVAILABILITY.available;
+}
+function availabilityBadgeHTML(person){
+  const a = availabilityOf(person);
+  return `<span class="availability ${a.cls}" tabindex="0" data-tooltip="${a.tooltip}">
+    <svg class="icon"><use href="${a.icon}"/></svg>${a.label}
+  </span>`;
+}
+function availabilityDotHTML(person){
+  const a = availabilityOf(person);
+  return `<span class="availability-dot ${a.cls}" title="${a.tooltip}">${a.label}</span>`;
+}
+
 let currentUser = null;
 
 function getCurrentPerson(){
@@ -35,6 +76,7 @@ function applyProfileToPerson(person, data){
   const tags = [...(data.techTags||[]), ...(data.bizTags||[])];
   if(tags.length) person.tags = tags;
   if(data.bio) person.bio = data.bio;
+  if(typeof data.available === 'boolean') person.available = data.available;
 }
 
 async function saveProfile(email, data){
@@ -78,6 +120,7 @@ function populateWizard(person){
 }
 
 function collectWizardData(){
+  const person = getCurrentPerson();
   return {
     dir: document.getElementById('sel-dir').value,
     area: document.getElementById('sel-area').value,
@@ -87,10 +130,66 @@ function collectWizardData(){
     techTags: chipValues('chips-tech'),
     bizTags: chipValues('chips-biz'),
     bio: document.getElementById('onb-bio').value.trim(),
+    available: person ? person.available !== false : true,
   };
 }
 
+/* ------------------------------------------------------------
+   Alternância entre "Perfil" e "Configurações"
+   ------------------------------------------------------------ */
+let profileSection = 'perfil';
+function showProfileSection(section){
+  profileSection = section;
+  document.querySelectorAll('.profile-section-btn').forEach(btn=>{
+    btn.classList.toggle('is-active', btn.dataset.section === section);
+  });
+  const isConfig = section === 'config';
+  document.getElementById('profile-settings').hidden = !isConfig;
+  // ao entrar em Configurações, esconde perfil e formulário
+  if(isConfig){
+    document.getElementById('profile-view').hidden = true;
+    document.getElementById('profile-wizard').hidden = true;
+    renderSettings();
+  } else {
+    const person = getCurrentPerson();
+    if(person) hasSavedProfile ? showProfileView(person) : showProfileWizard(person);
+  }
+}
+document.querySelectorAll('.profile-section-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>showProfileSection(btn.dataset.section));
+});
+
+let hasSavedProfile = false;
+
+function renderSettings(){
+  const person = getCurrentPerson();
+  if(!person) return;
+  const available = person.available !== false;
+  const toggle = document.getElementById('toggle-availability');
+  toggle.checked = available;
+  document.getElementById('settings-availability-preview').innerHTML = availabilityBadgeHTML(person);
+  document.getElementById('settings-account-name').textContent = person.name;
+  document.getElementById('settings-account-email').textContent = person.email || '—';
+  const badge = document.getElementById('settings-role-badge');
+  badge.textContent = isAdmin() ? 'Gestor' : 'Colaborador';
+  badge.classList.toggle('is-admin', isAdmin());
+}
+
+document.getElementById('toggle-availability').addEventListener('change', async (e)=>{
+  const person = getCurrentPerson();
+  if(!person) return;
+  person.available = e.target.checked;
+  document.getElementById('settings-availability-preview').innerHTML = availabilityBadgeHTML(person);
+  // grava junto do perfil, preservando o que já estava salvo
+  const saved = (await loadProfile(currentUser)) || collectWizardData();
+  saved.available = person.available;
+  await saveProfile(currentUser, saved);
+  showToast(person.available ? 'Agenda marcada como disponível' : 'Agenda marcada como indisponível');
+  if(typeof renderHub === 'function') renderHub();
+});
+
 function showProfileWizard(person){
+  document.getElementById('profile-settings').hidden = true;
   document.getElementById('profile-view').hidden = true;
   document.getElementById('profile-wizard').hidden = false;
   populateWizard(person);
@@ -99,6 +198,7 @@ function showProfileWizard(person){
 }
 
 function showProfileView(person){
+  document.getElementById('profile-settings').hidden = true;
   document.getElementById('profile-wizard').hidden = true;
   document.getElementById('profile-view').hidden = false;
   const avatar=document.getElementById('pv-me-avatar');
@@ -110,9 +210,10 @@ function showProfileView(person){
     <svg class="icon" viewBox="0 0 24 24"><use href="#i-building"/></svg><span>${person.dir}</span>
     <svg class="icon" viewBox="0 0 24 24"><use href="#i-chevron-right"/></svg><span>${person.area}</span>
     <svg class="icon" viewBox="0 0 24 24"><use href="#i-chevron-right"/></svg><span>${person.team}</span>`;
+  document.getElementById('pv-me-availability').innerHTML = availabilityBadgeHTML(person);
   document.getElementById('pv-me-email').innerHTML = `<svg class="icon" style="width:14px;height:14px"><use href="#i-mail"/></svg>${person.email||'—'}`;
   document.getElementById('pv-me-bio').textContent = person.bio;
-  document.getElementById('pv-me-tags').innerHTML = person.tags.map(t=>`<span class="tag-pill">${t}</span>`).join('');
+  document.getElementById('pv-me-tags').innerHTML = tagPillsHTML(person.tags);
   const myProjects = PROJECTS.filter(pr=>pr.author===person.name && !removedProjects.has(pr.title));
   document.getElementById('pv-me-projects').innerHTML = myProjects.length
     ? myProjects.map(pr=>`<div class="proj-item"><h5>${pr.title}</h5><p>${pr.problem}</p></div>`).join('')
@@ -126,6 +227,8 @@ function updateTopbarForUser(person){
   if(nm) nm.textContent=person.name;
   const rl=document.getElementById('topbar-role');
   if(rl) rl.textContent = person.team || person.area;
+  const dn=document.getElementById('user-dropdown-name');
+  if(dn) dn.textContent=person.name;
 }
 
 async function loadProfileForCurrentUser(){
@@ -133,6 +236,11 @@ async function loadProfileForCurrentUser(){
   if(!person) return;
   updateTopbarForUser(person);
   const saved = await loadProfile(currentUser);
+  hasSavedProfile = !!saved;
+  profileSection = 'perfil';
+  document.querySelectorAll('.profile-section-btn').forEach(btn=>{
+    btn.classList.toggle('is-active', btn.dataset.section === 'perfil');
+  });
   if(saved){
     applyProfileToPerson(person, saved);
     showProfileView(person);

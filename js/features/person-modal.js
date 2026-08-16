@@ -11,7 +11,8 @@ function openModal(p,tab){
   document.getElementById('modal-crumb-area').textContent=p.area;
   document.getElementById('modal-crumb-team').textContent=p.team;
   document.getElementById('modal-bio').textContent=p.bio;
-  document.getElementById('modal-tags').innerHTML=p.tags.map(t=>`<span class="tag-pill">${t}</span>`).join('');
+  document.getElementById('modal-availability').innerHTML=availabilityBadgeHTML(p);
+  document.getElementById('modal-tags').innerHTML=tagPillsHTML(p.tags);
   document.getElementById('modal-teams').href=`https://teams.microsoft.com/l/chat/0/0?users=${p.email}`;
   document.getElementById('modal-mail').href=`mailto:${p.email}`;
 

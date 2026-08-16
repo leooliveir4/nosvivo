@@ -30,6 +30,7 @@ document.getElementById('btn-step-next').addEventListener('click', async ()=>{
   btn.disabled=false;
   btn.textContent=original;
   showToast(ok ? 'Perfil salvo com sucesso' : 'Perfil salvo nesta sessão (armazenamento indisponível)');
+  hasSavedProfile = true;
   showProfileView(person);
   if(typeof renderHub==='function') renderHub();
   if(typeof renderProjects==='function') renderProjects();

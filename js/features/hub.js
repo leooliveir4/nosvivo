@@ -11,9 +11,10 @@ function personCard(p){
     <div class="person-top">
       <div class="avatar" style="background:${p.color};width:46px;height:46px;font-size:14px">${p.initials}</div>
       <div><div class="person-name">${p.name}</div><div class="person-role">${p.role}</div>
-      <div class="person-org"><svg class="icon" style="width:12px;height:12px"><use href="#i-building"/></svg>${p.area}</div></div>
+      <div class="person-org"><svg class="icon" style="width:12px;height:12px"><use href="#i-building"/></svg>${p.area}</div>
+      <div style="margin-top:6px">${availabilityDotHTML(p)}</div></div>
     </div>
-    <div class="person-tags">${shownTags.map(t=>`<span class="tag-pill">${t}</span>`).join('')}${extra}</div>
+    <div class="person-tags">${tagPillsHTML(shownTags)}${extra}</div>
     <button class="btn btn-secondary btn-sm btn-block btn-view-profile">Ver perfil</button>
   </div>`;
 }

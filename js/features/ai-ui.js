@@ -28,6 +28,7 @@ function iaHandleSubmit(){
   }
   iaState.goalText=text;
   document.getElementById('ia-results').hidden=true;
+  document.getElementById('ia-clear-btn').hidden=true;
   document.getElementById('ia-processing').hidden=false;
   iaScrollTo('ia-processing',{behavior:'smooth',block:'center'});
   iaRunProcessingSequence(()=>{
@@ -38,10 +39,27 @@ function iaHandleSubmit(){
     iaRenderResults();
     document.getElementById('ia-processing').hidden=true;
     document.getElementById('ia-results').hidden=false;
+    // o botão de limpar só existe depois que há resultado na tela
+    document.getElementById('ia-clear-btn').hidden=false;
     iaScrollTo('ia-results',{behavior:'smooth',block:'start'});
   });
 }
 document.getElementById('ia-submit-btn').addEventListener('click', iaHandleSubmit);
+
+/* volta ao estado inicial: sem resultado, sem loading, sem botão */
+function iaClearSearch(){
+  document.getElementById('ia-results').hidden=true;
+  document.getElementById('ia-processing').hidden=true;
+  document.getElementById('ia-clear-btn').hidden=true;
+  const input=document.getElementById('ia-goal-input');
+  input.value='';
+  iaState.detectedTags=[]; iaState.goalText=''; iaState.matches=[];
+  iaState.connectedNames=[]; iaState.journey=[];
+  iaScrollTo('ia-hero-card',{behavior:'smooth',block:'start'});
+  setTimeout(()=>input.focus(),300);
+  showToast('Busca limpa');
+}
+document.getElementById('ia-clear-btn').addEventListener('click', iaClearSearch);
 
 function iaRunProcessingSequence(done){
   const steps=['Analisando seu objetivo...','Identificando conhecimentos necessários...','Encontrando especialistas compatíveis...'];

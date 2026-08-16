@@ -78,11 +78,25 @@
 .user-dropdown-item svg{width:16px;height:16px}
 .user-dropdown-item:hover{background:var(--danger-bg)}
 
+/* itens neutros (perfil, configurações) — só o "Sair" é vermelho */
+.user-dropdown-item.is-neutral{color:var(--text-600)}
+.user-dropdown-item.is-neutral:hover{background:var(--purple-50);color:var(--purple-700)}
+
+.user-dropdown-head{padding:9px 10px 7px;display:flex;flex-direction:column;gap:5px}
+.user-dropdown-head strong{font-size:12.5px;color:var(--text-900);line-height:1.2}
+.role-badge{
+  align-self:flex-start;font-family:var(--font-mono);font-size:9.5px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:var(--radius-pill);
+  background:var(--surface-sunk);border:1px solid var(--border);color:var(--text-400);
+}
+.role-badge.is-admin{background:var(--purple-50);border-color:var(--purple-100);color:var(--purple-700)}
+
 /* item de tema dentro do menu do perfil — só aparece no celular,
    onde o botão redondo da topbar fica oculto para não espremer as abas */
 .user-dropdown-theme{display:none;color:var(--text-600)}
 .user-dropdown-theme:hover{background:var(--purple-50);color:var(--purple-700)}
 .user-dropdown-sep{display:none;height:1px;background:var(--border);margin:5px 4px}
+.user-dropdown-sep.is-always{display:block}
 
 .is-hidden{display:none !important}
 .avatar{

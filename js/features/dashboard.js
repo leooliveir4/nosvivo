@@ -31,3 +31,28 @@ renderHeatmap();
 // quando o tema muda (o resto da UI reage sozinho via CSS vars)
 new MutationObserver(renderHeatmap).observe(document.documentElement,
   { attributes:true, attributeFilter:['data-theme'] });
+
+/* ============================================================
+   KPI · PROJETOS COMPARTILHADOS (contagem ao vivo)
+   ------------------------------------------------------------
+   Lê o mesmo array usado pelo repositório, descontando o que foi
+   removido — então o número acompanha cada inclusão/exclusão.
+   ============================================================ */
+function countSharedProjects(){
+  return PROJECTS.filter(p=>!removedProjects.has(p.title)).length;
+}
+function renderProjectsKPI(){
+  const el = document.getElementById('kpi-projects-value');
+  if(!el) return;
+  const total = countSharedProjects();
+  const previous = Number(el.textContent) || 0;
+  el.textContent = total;
+  const trend = document.getElementById('kpi-projects-trend');
+  if(trend && previous !== total){
+    const diff = total - previous;
+    trend.textContent = (diff > 0 ? '+' : '') + diff + (Math.abs(diff) === 1 ? ' projeto' : ' projetos');
+    trend.classList.toggle('up', diff > 0);
+    trend.classList.toggle('down', diff < 0);
+  }
+}
+renderProjectsKPI();

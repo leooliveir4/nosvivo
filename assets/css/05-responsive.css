@@ -58,10 +58,25 @@
   .ia-top-actions{flex-direction:column;align-items:stretch}
   .ia-top-actions .btn{width:100%;justify-content:center}
   .ia-section-card{padding:20px}
+
+  /* --- elementos adicionados na última rodada --- */
+  /* seções Perfil / Configurações */
+  .profile-sections{gap:6px}
+  .profile-section-btn{flex:1;justify-content:center;padding:9px 12px;font-size:12.5px}
+  /* privacidade: interruptor abaixo do texto para não espremer */
+  .settings-row{flex-direction:column;gap:12px}
+  .settings-row .switch{align-self:flex-start}
+  #profile-view,#profile-settings{padding:20px !important}
+  /* flag de disponibilidade: tooltip preso à esquerda não estoura a tela */
+  .availability::after{max-width:calc(100vw - 64px);white-space:normal}
+  /* menu do header cresceu (perfil, configurações, tema, sair) */
+  .user-dropdown{min-width:200px}
+  /* botão flutuante da IA acompanha as margens do celular */
+  .ia-clear-btn{left:16px;bottom:16px;padding:11px 17px;font-size:13px}
 }
 
 /* ------------------------------------------------------------
-   Telas muito estreitas (≤400px) — mantém as 5 abas na linha
+   Telas muito estreitas (≤400px) — mantém as abas na linha
    ------------------------------------------------------------ */
 @media (max-width:400px){
   .topbar{padding:0 10px;gap:8px}
@@ -70,6 +85,8 @@
   .tab-btn{width:34px;height:34px}
   .tab-btn svg{width:16px;height:16px}
   .user-chip .avatar{width:27px;height:27px;font-size:10.5px}
+  .kpi-row{grid-template-columns:1fr}
+  .ia-clear-btn{left:12px;bottom:12px}
 }
 
 /* ------------------------------------------------------------
