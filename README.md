@@ -91,8 +91,6 @@ A navegação principal é composta por ícones (com tooltip), na seguinte ordem
 
 **Menu do avatar** (canto superior direito) reúne o que é pessoal, nesta ordem: **Meu perfil**, **Configurações**, alternador de **tema** (no celular) e **Sair**.
 
-Clicar na **logo** leva à Central de colaboradores, a tela principal do produto.
-
 A tela de **login** fica fora da navegação: é a porta de entrada. Ao autenticar, a barra aparece e o usuário é levado ao próprio perfil.
 
 ---
@@ -306,7 +304,7 @@ npm install jsdom
 node tests/smoke-test.js
 ```
 
-**Cobertura (56 verificações):** estrutura dos arquivos separados · RBAC nos dois papéis (aba oculta e navegação bloqueada) · login com senha incorreta e com sucesso · perfil salvo e relido · privacidade e flag de disponibilidade nos três pontos de exibição · taxonomia de tags por cor · projetos sem descrição no card e com todos os campos obrigatórios · KPI de projetos reagindo a remoção · fluxo completo da IA, do estado idle ao limpar busca · permissão de exclusão por dono · filtro de disponibilidade · atalho da logo · ausência de erros de JavaScript.
+**Cobertura (59 verificações):** estrutura dos arquivos separados · RBAC nos dois papéis (aba oculta e navegação bloqueada) · login com senha incorreta e com sucesso · perfil salvo e relido · privacidade e flag de disponibilidade nos três pontos de exibição · taxonomia de tags por cor · preview do problema no card e todos os campos do cadastro obrigatórios · KPI de projetos reagindo a remoção · fluxo completo da IA, do estado idle ao limpar busca · permissão de exclusão por dono (inclusive alternando entre os papéis) · filtro de disponibilidade nos dois estados · identidade preservada após editar o e-mail de contato · ausência de erros de JavaScript.
 
 ---
 
@@ -405,7 +403,7 @@ Registro das mudanças solicitadas ao longo do desenvolvimento, em ordem cronol�
 - **Perfil movido para o menu do avatar**, junto com a nova aba **Configurações**, acima do "Sair"
 - **Configurações → Privacidade** com interruptor de disponibilidade de agenda, refletido no perfil, nos cards e no modal, com as mensagens explicativas ao passar o cursor
 - **Tags por cor** unificadas: tecnologia em roxo, regra de negócio em magenta, em todas as telas
-- **Projetos**: a descrição saiu do card e passou a aparecer só no modal de detalhe; todos os campos do cadastro viraram obrigatórios, com erro visual por campo e submit bloqueado
+- **Projetos**: todos os campos do cadastro viraram obrigatórios, com erro visual por campo e submit bloqueado
 - **Painel gestor**: novo KPI de **projetos compartilhados** com contagem em tempo real, que sobe e desce conforme soluções são cadastradas ou removidas
 - **NÓsVivo IA**: corrigido o loading que aparecia antes mesmo da busca (o atributo `hidden` estava sendo vencido pelo `display:flex` do componente); adicionado botão flutuante **Limpar busca**, que só existe quando há resultado, acompanha o scroll e some ao ser usado
 - Domínio dos e-mails de demonstração passou a ser o do próprio site
@@ -413,8 +411,8 @@ Registro das mudanças solicitadas ao longo do desenvolvimento, em ordem cronol�
 ### 11. Permissões finas, filtro e atalho
 
 - **Exclusão restrita ao dono**: colaborador só remove as soluções que cadastrou; gestor remove qualquer uma. A lixeira some nos cards de terceiros e a checagem se repete no ato da remoção
-- **Filtro de disponibilidade** na Central de colaboradores, para achar quem está com a agenda aberta
-- **Logo clicável** levando à Central de colaboradores (tela principal)
+- **Filtro de disponibilidade** na Central de colaboradores, para achar quem está com a agenda aberta (a base de demonstração traz pessoas nos dois estados, para o filtro ter efeito visível)
+- **Identidade da conta desacoplada do e-mail de contato**: o vínculo usa um `loginEmail` imutável, então editar o e-mail no cadastro não faz o usuário perder a posse dos próprios projetos
 
 ---
 

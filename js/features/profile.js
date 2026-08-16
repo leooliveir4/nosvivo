@@ -62,7 +62,12 @@ function availabilityDotHTML(person){
 let currentUser = null;
 
 function getCurrentPerson(){
-  return PEOPLE.find(p=>p.email && currentUser && p.email.toLowerCase()===currentUser.toLowerCase());
+  if(!currentUser) return null;
+  const alvo = currentUser.toLowerCase();
+  // usa loginEmail (imutável) e não p.email, que o usuário pode editar
+  // no cadastro — senão a pessoa "perderia" a própria conta e deixaria
+  // de conseguir gerenciar os próprios projetos
+  return PEOPLE.find(p=>(p.loginEmail||p.email||'').toLowerCase()===alvo) || null;
 }
 
 function applyProfileToPerson(person, data){

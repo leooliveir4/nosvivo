@@ -88,12 +88,15 @@ document.querySelectorAll('#pick-biz button').forEach(btn=>btn.addEventListener(
   btn.classList.contains('is-on')?activeFilters.biz.add(btn.dataset.tag):activeFilters.biz.delete(btn.dataset.tag);
   renderHub();
 }));
-document.querySelectorAll('#pick-availability button').forEach(btn=>btn.addEventListener('click',()=>{
+/* delegação no container: sobrevive a qualquer re-render da sidebar */
+document.getElementById('pick-availability').addEventListener('click',(e)=>{
+  const btn = e.target.closest('button[data-availability]');
+  if(!btn) return;
   btn.classList.toggle('is-on');
   const estado = btn.dataset.availability;
   btn.classList.contains('is-on')?activeFilters.availability.add(estado):activeFilters.availability.delete(estado);
   renderHub();
-}));
+});
 function clearFilters(){
   activeFilters.dir.clear();activeFilters.area.clear();activeFilters.tech.clear();activeFilters.biz.clear();activeFilters.availability.clear();activeFilters.q='';
   document.querySelectorAll('.f-dir,.f-area').forEach(cb=>cb.checked=false);

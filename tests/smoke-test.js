@@ -94,18 +94,19 @@ const logout = () => { doc.getElementById('user-chip-btn').click(); doc.getEleme
   console.log('\n== FILTRO DE DISPONIBILIDADE ==');
   doc.querySelector('.tab-btn[data-target="tela-hub"]').click();
   const totalPessoas = doc.querySelectorAll('.person-card').length;
+  const btnDisp = doc.querySelector('#pick-availability button[data-availability="available"]');
+  btnDisp.click();
+  ok('botão fica marcado ao clicar', btnDisp.classList.contains('is-on'));
+  const disponiveis = doc.querySelectorAll('.person-card').length;
+  ok('filtra por agenda disponível', disponiveis > 0 && disponiveis < totalPessoas, totalPessoas + ' -> ' + disponiveis);
+  btnDisp.click();
   doc.querySelector('#pick-availability button[data-availability="busy"]').click();
   const indisponiveis = doc.querySelectorAll('.person-card').length;
-  ok('filtra por agenda indisponível', indisponiveis < totalPessoas, totalPessoas + ' -> ' + indisponiveis);
+  ok('filtra por agenda indisponível', indisponiveis > 0 && indisponiveis < totalPessoas, totalPessoas + ' -> ' + indisponiveis);
   ok('só mostra indisponíveis', [...doc.querySelectorAll('.person-card .availability-dot')].every(d=>/indisponível/i.test(d.textContent)));
   doc.getElementById('btn-clear-filters').click();
   ok('limpar restaura a lista', doc.querySelectorAll('.person-card').length === totalPessoas);
   ok('limpar desmarca o filtro', !doc.querySelector('#pick-availability button.is-on'));
-
-  console.log('\n== LOGO -> TELA PRINCIPAL ==');
-  doc.querySelector('.tab-btn[data-target="tela-projetos"]').click();
-  doc.getElementById('brand-home').click();
-  ok('logo leva à Central de colaboradores', doc.getElementById('tela-hub').classList.contains('is-active'));
 
   console.log('\n== TAGS POR COR ==');
   doc.querySelector('.tab-btn[data-target="tela-hub"]').click();
@@ -117,7 +118,7 @@ const logout = () => { doc.getElementById('user-chip-btn').click(); doc.getEleme
 
   console.log('\n== PROJETOS ==');
   doc.querySelector('.tab-btn[data-target="tela-projetos"]').click();
-  ok('descrição fora do card', !doc.querySelector('.proj-card .proj-problem'));
+  ok('preview do problema no card', !!doc.querySelector('.proj-card .proj-problem'));
   doc.querySelector('.proj-card').dispatchEvent(new w.Event('click', {bubbles:true}));
   ok('descrição aparece no modal', doc.getElementById('pv-problem').textContent.length > 10);
   doc.getElementById('project-view-close').click();
@@ -186,6 +187,17 @@ const logout = () => { doc.getElementById('user-chip-btn').click(); doc.getEleme
   await wait(300);
   ok('KPI cai ao remover projeto', Number(doc.getElementById('kpi-projects-value').textContent) === kpiBefore - 1,
      kpiBefore + ' -> ' + doc.getElementById('kpi-projects-value').textContent);
+
+  console.log('\n== IDENTIDADE APÓS EDITAR E-MAIL ==');
+  doc.getElementById('btn-open-profile').click();
+  doc.getElementById('btn-edit-profile').click();
+  doc.getElementById('onb-email').value = 'outro.contato@nosvivo.com.br';
+  for (let i=0;i<4;i++){ doc.getElementById('btn-step-next').click(); await wait(110); }
+  await wait(400);
+  ok('continua reconhecendo o usuário', w.eval('(getCurrentPerson()||{}).name') === 'Leonardo Silva',
+     w.eval('(getCurrentPerson()||{}).name'));
+  doc.querySelector('.tab-btn[data-target="tela-projetos"]').click();
+  ok('ainda gerencia os próprios projetos', doc.querySelectorAll('.btn-remove-project').length > 0);
 
   console.log('\n== SENHA ==');
   logout();

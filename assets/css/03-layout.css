@@ -10,13 +10,7 @@
   padding:0 28px;
   gap:28px;
 }
-.brand{
-  display:flex;align-items:center;gap:10px;flex-shrink:0;
-  background:none;border:none;padding:0;text-align:left;
-  border-radius:12px;transition:opacity .15s var(--ease);
-}
-.brand:hover{opacity:.78}
-.brand:active{transform:scale(.985)}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .brand-mark{
   width:38px;height:38px;border-radius:11px;
   background:linear-gradient(135deg,var(--purple-700),var(--purple-900));

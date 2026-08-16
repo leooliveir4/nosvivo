@@ -21,6 +21,7 @@ function projCard(pr){
     : '';
   return `<div class="proj-card" data-title="${pr.title}" tabindex="0" role="button" aria-label="Ver detalhes do projeto ${pr.title}">
     <h3>${pr.title}</h3>
+    <p class="proj-problem"><b>Problema resolvido:</b> ${pr.problem}</p>
     <div class="proj-stack">${pr.stack.map(s=>`<span class="tag-pill">${s}</span>`).join('')}${pr.rules.map(r=>`<span class="tag-pill tone-magenta">${r}</span>`).join('')}</div>
     <div class="proj-foot">
       <div class="proj-author"><div class="avatar" style="background:${person?person.color:'#660099'};width:26px;height:26px;font-size:9.5px">${person?person.initials:'??'}</div><span>${pr.author}</span></div>
