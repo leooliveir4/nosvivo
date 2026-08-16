@@ -90,6 +90,13 @@ document.addEventListener('click',(e)=>{ if(!userMenu.contains(e.target)) closeU
 document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeUserMenu(); });
 document.getElementById('btn-logout').addEventListener('click',logout);
 
+/* clicar na logo leva à tela principal (a topbar só existe logado,
+   então não há como acionar isso a partir do login) */
+document.getElementById('brand-home').addEventListener('click',()=>{
+  closeUserMenu();
+  goToTela('tela-hub');
+});
+
 /* perfil e configurações agora moram no menu do header */
 document.getElementById('btn-open-profile').addEventListener('click',()=>{
   closeUserMenu();

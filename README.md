@@ -91,6 +91,8 @@ A navegação principal é composta por ícones (com tooltip), na seguinte ordem
 
 **Menu do avatar** (canto superior direito) reúne o que é pessoal, nesta ordem: **Meu perfil**, **Configurações**, alternador de **tema** (no celular) e **Sair**.
 
+Clicar na **logo** leva à Central de colaboradores, a tela principal do produto.
+
 A tela de **login** fica fora da navegação: é a porta de entrada. Ao autenticar, a barra aparece e o usuário é levado ao próprio perfil.
 
 ---
@@ -101,10 +103,10 @@ Cada conta carrega um papel, definido em `js/features/auth.js`:
 
 | Papel | Pode |
 |---|---|
-| **USER** | Ler todo o catálogo de pessoas e projetos; editar apenas o próprio perfil e os próprios projetos. **Não enxerga o Painel gestor** — a aba nem é renderizada. |
-| **ADMIN** | Tudo que o USER faz, mais o **Painel gestor** com os indicadores gerenciais. |
+| **USER** | Ler todo o catálogo de pessoas e projetos; editar o próprio perfil e **remover apenas as soluções que cadastrou** (nos projetos de terceiros a lixeira nem aparece). **Não enxerga o Painel gestor** — a aba nem é renderizada. |
+| **ADMIN** | Tudo que o USER faz, mais a remoção de **qualquer** solução do repositório e o **Painel gestor** com os indicadores gerenciais. |
 
-A restrição é aplicada em duas camadas: a aba é escondida (`applyRoleVisibility`) e a própria navegação recusa o destino (`goToTela` verifica `canAccess`), então nem forçando a troca de tela um USER entra no painel.
+A restrição é aplicada em duas camadas: a aba é escondida (`applyRoleVisibility`) e a própria navegação recusa o destino (`goToTela` verifica `canAccess`), então nem forçando a troca de tela um USER entra no painel. A exclusão de projetos segue a mesma lógica — `canRemoveProject()` decide se o botão é renderizado **e** é checado de novo no momento da remoção.
 
 > Como todo o protótipo roda no navegador, esse controle é de **experiência**, não de segurança. Em produção a checagem precisa acontecer no servidor.
 
@@ -268,6 +270,8 @@ O perfil vive no menu do avatar e tem duas seções:
 
 A flag aparece em três lugares, sempre a partir do mesmo dado: no seu perfil, nos cards da Central de colaboradores (em versão compacta) e no modal de perfil detalhado. A escolha é gravada junto do perfil, então persiste entre sessões.
 
+A Central de colaboradores tem um **filtro de disponibilidade** na barra lateral, permitindo listar só quem está com a agenda aberta — útil para quem precisa de ajuda agora.
+
 ### Taxonomia de tags
 
 Competências e projetos usam o **mesmo código de cores** em todo o sistema:
@@ -302,7 +306,7 @@ npm install jsdom
 node tests/smoke-test.js
 ```
 
-**Cobertura (48 verificações):** estrutura dos arquivos separados · RBAC nos dois papéis (aba oculta e navegação bloqueada) · login com senha incorreta e com sucesso · perfil salvo e relido · privacidade e flag de disponibilidade nos três pontos de exibição · taxonomia de tags por cor · projetos sem descrição no card e com todos os campos obrigatórios · KPI de projetos reagindo a remoção · fluxo completo da IA, do estado idle ao limpar busca · ausência de erros de JavaScript.
+**Cobertura (56 verificações):** estrutura dos arquivos separados · RBAC nos dois papéis (aba oculta e navegação bloqueada) · login com senha incorreta e com sucesso · perfil salvo e relido · privacidade e flag de disponibilidade nos três pontos de exibição · taxonomia de tags por cor · projetos sem descrição no card e com todos os campos obrigatórios · KPI de projetos reagindo a remoção · fluxo completo da IA, do estado idle ao limpar busca · permissão de exclusão por dono · filtro de disponibilidade · atalho da logo · ausência de erros de JavaScript.
 
 ---
 
@@ -405,6 +409,12 @@ Registro das mudanças solicitadas ao longo do desenvolvimento, em ordem cronol�
 - **Painel gestor**: novo KPI de **projetos compartilhados** com contagem em tempo real, que sobe e desce conforme soluções são cadastradas ou removidas
 - **NÓsVivo IA**: corrigido o loading que aparecia antes mesmo da busca (o atributo `hidden` estava sendo vencido pelo `display:flex` do componente); adicionado botão flutuante **Limpar busca**, que só existe quando há resultado, acompanha o scroll e some ao ser usado
 - Domínio dos e-mails de demonstração passou a ser o do próprio site
+
+### 11. Permissões finas, filtro e atalho
+
+- **Exclusão restrita ao dono**: colaborador só remove as soluções que cadastrou; gestor remove qualquer uma. A lixeira some nos cards de terceiros e a checagem se repete no ato da remoção
+- **Filtro de disponibilidade** na Central de colaboradores, para achar quem está com a agenda aberta
+- **Logo clicável** levando à Central de colaboradores (tela principal)
 
 ---
 

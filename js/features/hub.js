@@ -2,7 +2,7 @@
    TELA 3 · HUB — RENDER + FILTROS + BUSCA
    ============================================================ */
 const grid=document.getElementById('people-grid');
-const activeFilters={dir:new Set(),area:new Set(),tech:new Set(),biz:new Set(),q:''};
+const activeFilters={dir:new Set(),area:new Set(),tech:new Set(),biz:new Set(),availability:new Set(),q:''};
 
 function personCard(p){
   const shownTags=p.tags.slice(0,3);
@@ -28,6 +28,10 @@ function skeletonCards(n){
 }
 
 function matches(p){
+  if(activeFilters.availability.size){
+    const estado = p.available === false ? 'busy' : 'available';
+    if(!activeFilters.availability.has(estado)) return false;
+  }
   if(activeFilters.dir.size && !activeFilters.dir.has(p.dirKey)) return false;
   if(activeFilters.area.size && !activeFilters.area.has(p.areaKey)) return false;
   if(activeFilters.tech.size && ![...activeFilters.tech].every(t=>p.tags.includes(t))) return false;
@@ -84,10 +88,16 @@ document.querySelectorAll('#pick-biz button').forEach(btn=>btn.addEventListener(
   btn.classList.contains('is-on')?activeFilters.biz.add(btn.dataset.tag):activeFilters.biz.delete(btn.dataset.tag);
   renderHub();
 }));
+document.querySelectorAll('#pick-availability button').forEach(btn=>btn.addEventListener('click',()=>{
+  btn.classList.toggle('is-on');
+  const estado = btn.dataset.availability;
+  btn.classList.contains('is-on')?activeFilters.availability.add(estado):activeFilters.availability.delete(estado);
+  renderHub();
+}));
 function clearFilters(){
-  activeFilters.dir.clear();activeFilters.area.clear();activeFilters.tech.clear();activeFilters.biz.clear();activeFilters.q='';
+  activeFilters.dir.clear();activeFilters.area.clear();activeFilters.tech.clear();activeFilters.biz.clear();activeFilters.availability.clear();activeFilters.q='';
   document.querySelectorAll('.f-dir,.f-area').forEach(cb=>cb.checked=false);
-  document.querySelectorAll('#pick-tech button, #pick-biz button').forEach(b=>b.classList.remove('is-on'));
+  document.querySelectorAll('#pick-tech button, #pick-biz button, #pick-availability button').forEach(b=>b.classList.remove('is-on'));
   document.getElementById('hub-search').value='';
   renderHub();
 }

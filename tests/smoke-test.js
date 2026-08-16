@@ -82,6 +82,31 @@ const logout = () => { doc.getElementById('user-chip-btn').click(); doc.getEleme
   ok('volta para o perfil', !doc.getElementById('profile-view').hidden);
   ok('perfil reflete indisponibilidade', /Agenda indisponível/.test(doc.getElementById('pv-me-availability').textContent));
 
+  console.log('\n== PERMISSÃO DE EXCLUSÃO (USER) ==');
+  doc.querySelector('.tab-btn[data-target="tela-projetos"]').click();
+  const cards = [...doc.querySelectorAll('.proj-card')];
+  const meuCard = cards.find(c => /Marina/.test(c.querySelector('.proj-author span').textContent));
+  const outroCard = cards.find(c => !/Marina/.test(c.querySelector('.proj-author span').textContent));
+  ok('sem lixeira em projeto de outra pessoa', outroCard && !outroCard.querySelector('.btn-remove-project'),
+     outroCard && outroCard.querySelector('.proj-author span').textContent);
+  ok('com lixeira no projeto próprio', !meuCard || !!meuCard.querySelector('.btn-remove-project'));
+
+  console.log('\n== FILTRO DE DISPONIBILIDADE ==');
+  doc.querySelector('.tab-btn[data-target="tela-hub"]').click();
+  const totalPessoas = doc.querySelectorAll('.person-card').length;
+  doc.querySelector('#pick-availability button[data-availability="busy"]').click();
+  const indisponiveis = doc.querySelectorAll('.person-card').length;
+  ok('filtra por agenda indisponível', indisponiveis < totalPessoas, totalPessoas + ' -> ' + indisponiveis);
+  ok('só mostra indisponíveis', [...doc.querySelectorAll('.person-card .availability-dot')].every(d=>/indisponível/i.test(d.textContent)));
+  doc.getElementById('btn-clear-filters').click();
+  ok('limpar restaura a lista', doc.querySelectorAll('.person-card').length === totalPessoas);
+  ok('limpar desmarca o filtro', !doc.querySelector('#pick-availability button.is-on'));
+
+  console.log('\n== LOGO -> TELA PRINCIPAL ==');
+  doc.querySelector('.tab-btn[data-target="tela-projetos"]').click();
+  doc.getElementById('brand-home').click();
+  ok('logo leva à Central de colaboradores', doc.getElementById('tela-hub').classList.contains('is-active'));
+
   console.log('\n== TAGS POR COR ==');
   doc.querySelector('.tab-btn[data-target="tela-hub"]').click();
   const card = doc.querySelector('.person-card');
@@ -149,6 +174,11 @@ const logout = () => { doc.getElementById('user-chip-btn').click(); doc.getEleme
   ok('KPI de projetos existe', !!doc.getElementById('kpi-projects-value'));
   ok('KPI conta projetos', Number(doc.getElementById('kpi-projects-value').textContent) > 0,
      doc.getElementById('kpi-projects-value').textContent + ' projetos');
+
+  doc.querySelector('.tab-btn[data-target="tela-projetos"]').click();
+  ok('gestor vê lixeira em todos os projetos',
+     [...doc.querySelectorAll('.proj-card')].every(c=>!!c.querySelector('.btn-remove-project')));
+  doc.querySelector('.tab-btn[data-target="tela-dashboard"]').click();
 
   const kpiBefore = Number(doc.getElementById('kpi-projects-value').textContent);
   doc.querySelector('.tab-btn[data-target="tela-projetos"]').click();

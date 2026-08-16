@@ -4,21 +4,38 @@
 const projGrid=document.getElementById('proj-grid');
 let activeStack='all', projQuery='';
 const removedProjects=new Set();
+/* Colaborador (USER) só remove o que é dele; gestor (ADMIN) remove
+   qualquer solução do repositório. */
+function canRemoveProject(pr){
+  if(typeof isAdmin === 'function' && isAdmin()) return true;
+  const me = getCurrentPerson();
+  return !!me && pr.author === me.name;
+}
+
 function projCard(pr){
   const person=PEOPLE.find(p=>p.name===pr.author);
+  const removeBtn = canRemoveProject(pr)
+    ? `<button class="icon-btn btn-remove-project" aria-label="Remover projeto ${pr.title}" data-tooltip-title="Remover">
+        <svg class="icon"><use href="#i-trash"/></svg>
+      </button>`
+    : '';
   return `<div class="proj-card" data-title="${pr.title}" tabindex="0" role="button" aria-label="Ver detalhes do projeto ${pr.title}">
     <h3>${pr.title}</h3>
     <div class="proj-stack">${pr.stack.map(s=>`<span class="tag-pill">${s}</span>`).join('')}${pr.rules.map(r=>`<span class="tag-pill tone-magenta">${r}</span>`).join('')}</div>
     <div class="proj-foot">
       <div class="proj-author"><div class="avatar" style="background:${person?person.color:'#660099'};width:26px;height:26px;font-size:9.5px">${person?person.initials:'??'}</div><span>${pr.author}</span></div>
       <div class="proj-meta"><svg class="icon" style="width:13px;height:13px"><use href="#i-paperclip"/></svg>${pr.files}</div>
-      <button class="icon-btn btn-remove-project" aria-label="Remover projeto ${pr.title}" data-tooltip-title="Remover">
-        <svg class="icon"><use href="#i-trash"/></svg>
-      </button>
+      ${removeBtn}
     </div>
   </div>`;
 }
 function removeProject(title){
+  const pr = PROJECTS.find(p=>p.title===title);
+  // trava também no ato da remoção, não só na renderização do botão
+  if(pr && !canRemoveProject(pr)){
+    showToast('Você só pode remover as soluções que cadastrou');
+    return;
+  }
   removedProjects.add(title);
   renderProjects();
   showToast('Projeto removido do repositório','Desfazer',()=>{

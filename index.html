@@ -93,10 +93,10 @@
      TOPBAR
      ============================================================ -->
 <header class="topbar is-hidden" id="app-topbar">
-  <div class="brand">
+  <button class="brand" id="brand-home" type="button" aria-label="Ir para a Central de colaboradores">
     <div class="brand-mark"><svg class="icon" style="stroke:#fff" viewBox="0 0 24 24"><use href="#i-elo-mark"/></svg></div>
     <div class="brand-text"><strong>NÓsVivo</strong><span>Rede de conhecimento Vivo</span></div>
-  </div>
+  </button>
 
   <div class="nav-center">
     <nav class="tabs-nav" aria-label="Navegação entre telas">
@@ -551,6 +551,14 @@
   <div class="hub-layout">
     <aside class="hub-sidebar">
       <div class="sidebar-head"><strong><svg class="icon" style="width:16px;height:16px"><use href="#i-filter"/></svg>Filtros</strong><button class="link-inline" id="btn-clear-filters">Limpar</button></div>
+
+      <div class="filter-block">
+        <h4>Disponibilidade</h4>
+        <div class="tagpick" id="pick-availability">
+          <button data-availability="available">Agenda disponível</button>
+          <button data-availability="busy">Agenda indisponível</button>
+        </div>
+      </div>
 
       <div class="filter-block">
         <h4>Diretoria</h4>
