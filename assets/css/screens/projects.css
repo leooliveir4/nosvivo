@@ -1,0 +1,25 @@
+/* ============================================================
+   9. TELA 4 — PROJETOS
+   ============================================================ */
+.proj-toolbar{padding:24px 28px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.stack-filters{display:flex;gap:7px;flex-wrap:wrap;padding:16px 28px 6px}
+.stack-chip{padding:6px 13px;border-radius:var(--radius-pill);border:1.3px solid var(--border-soft);font-size:12px;font-weight:600;color:var(--text-600);background:var(--surface)}
+.stack-chip.is-on{background:var(--accent-solid);border-color:var(--accent-solid);color:#fff}
+
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:18px 28px 60px}
+.proj-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;transition:transform .16s var(--ease),box-shadow .16s var(--ease);cursor:pointer}
+.proj-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)}
+.proj-card h3{font-size:15px;margin-bottom:8px;line-height:1.3}
+.proj-problem{font-size:12.5px;color:var(--text-600);margin-bottom:14px;flex:1}
+.proj-problem b{color:var(--text-900);font-weight:600}
+.proj-stack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.proj-foot{display:flex;align-items:center;gap:10px;padding-top:14px;border-top:1px solid var(--border)}
+.proj-author{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.proj-author .avatar{width:26px;height:26px;font-size:9.5px;flex-shrink:0}
+.proj-author span{font-size:11.5px;font-weight:600;color:var(--text-600);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proj-meta{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-400);flex-shrink:0}
+.proj-meta svg{width:13px;height:13px}
+.tag-pill.tone-magenta{background:var(--magenta-bg);color:var(--magenta-fg);border-color:var(--magenta-border)}
+.icon-btn{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-400);border:1px solid transparent;flex-shrink:0}
+.icon-btn:hover{background:var(--danger-bg);color:var(--danger)}
+.icon-btn svg{width:14.5px;height:14.5px}

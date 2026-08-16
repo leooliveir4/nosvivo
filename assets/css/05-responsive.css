@@ -1,0 +1,84 @@
+/* ============================================================
+   13. RESPONSIVO
+   ============================================================ */
+@media (max-width:1180px){
+  .people-grid,.proj-grid{grid-template-columns:repeat(2,1fr)}
+  .dash-grid{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:980px){
+  .login-combo{grid-template-columns:1fr;max-width:420px}
+  .login-hero{padding:30px 28px}
+  .hub-layout{grid-template-columns:1fr}
+  .hub-sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}
+  .grid-3{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .topbar{padding:0 12px;gap:10px}
+  .brand-text{display:none}
+  .tab-btn{padding:0 11px;font-size:12.5px}
+  .topbar-user .user-chip .name,.topbar-user .user-chip .role{display:none}
+  /* o botão redondo de tema espremia as abas — no celular ele sai da
+     topbar e vira um item dentro do menu do perfil, acima de "Sair" */
+  .topbar .theme-toggle{display:none}
+  .user-dropdown-theme{display:flex}
+  .user-dropdown-sep{display:block}
+  .nav-center{flex:1;min-width:0}
+  .tabs-nav{width:100%;justify-content:space-between;padding:4px 6px}
+  .tab-btn{width:38px;height:38px}
+  .user-chip{padding:5px 8px 5px 5px;gap:4px}
+  .tela-head{padding:22px 16px 0}
+  .onboard-wrap,.hub-main,.dash-wrap{padding-left:16px;padding-right:16px}
+  .stack-filters,.proj-toolbar,.proj-grid{padding-left:16px;padding-right:16px}
+  .people-grid,.proj-grid{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:1fr 1fr}
+  .stepper{overflow-x:visible;margin-bottom:24px;padding:0 4px}
+  /* no celular os rótulos colidem com a linha de progresso e são
+     redundantes (o card abaixo já exibe o título da etapa),
+     então fica só a régua de bolinhas 1-2-3-4 */
+  .step-label{display:none}
+  .step-item{flex:1;gap:0}
+  .step-item:last-child{flex:0}
+  .step-line{top:0;margin:0 4px}
+  .step-dot{width:30px;height:30px;font-size:11.5px}
+  .heatmap{font-size:10px;grid-template-columns:96px repeat(4,1fr)}
+  .modal{max-width:100%;max-height:94vh}  .ia-wrap{padding-left:16px;padding-right:16px}
+  .ia-hero-card{padding:28px 20px}
+  .ia-hero-content h1{font-size:22px}
+  /* dica e botão lado a lado espremem o texto numa coluna estreita
+     e jogam o botão para fora do card — no celular eles empilham */
+  .ia-input-foot{flex-direction:column;align-items:stretch;gap:12px}
+  .ia-input-foot .btn{order:1;width:100%;justify-content:center;white-space:normal}
+  .ia-hint{order:2;align-items:flex-start;font-size:10.5px;line-height:1.45;text-align:left}
+  .ia-hint svg{margin-top:1px}
+  .ia-input-card{padding:14px}
+  .ia-input-card textarea{min-height:96px;font-size:14px}
+  .ia-top-match{flex-direction:column}
+  .ia-top-match-headrow{flex-direction:column;align-items:flex-start}
+  .ia-top-actions{flex-direction:column;align-items:stretch}
+  .ia-top-actions .btn{width:100%;justify-content:center}
+  .ia-section-card{padding:20px}
+}
+
+/* ------------------------------------------------------------
+   Telas muito estreitas (≤400px) — mantém as 5 abas na linha
+   ------------------------------------------------------------ */
+@media (max-width:400px){
+  .topbar{padding:0 10px;gap:8px}
+  .brand-mark{width:34px;height:34px;border-radius:10px}
+  .tabs-nav{gap:0;padding:3px 4px}
+  .tab-btn{width:34px;height:34px}
+  .tab-btn svg{width:16px;height:16px}
+  .user-chip .avatar{width:27px;height:27px;font-size:10.5px}
+}
+
+/* ------------------------------------------------------------
+   Dispositivos de toque
+   Sem mouse, o :hover "gruda" após o toque e os tooltips ficam
+   presos na tela sobrepondo o conteúdo — então são desativados.
+   Os aria-label continuam servindo aos leitores de tela.
+   ------------------------------------------------------------ */
+@media (hover:none){
+  .tab-btn::after,.tab-btn::before,
+  .theme-toggle::after{display:none !important}
+}

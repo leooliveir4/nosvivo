@@ -1,0 +1,66 @@
+/* ============================================================
+   7. TELA 2 — ONBOARDING / PERFIL
+   ============================================================ */
+.onboard-wrap{padding:26px 32px 60px;max-width:880px;margin:0 auto}
+.stepper{display:flex;align-items:center;margin-bottom:36px}
+.step-item{display:flex;align-items:center;gap:10px;flex:1}
+.step-item:last-child{flex:0}
+.step-dot{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:12.5px;font-weight:600;
+  background:var(--surface);border:2px solid var(--border-soft);color:var(--text-400);
+  transition:all .2s var(--ease);
+}
+.step-item.is-done .step-dot{background:var(--brand-solid);border-color:var(--brand-solid);color:#fff}
+.step-item.is-active .step-dot{border-color:var(--purple-700);color:var(--purple-700);box-shadow:0 0 0 4px var(--purple-100)}
+.step-label{display:flex;flex-direction:column;line-height:1.15}
+.step-label strong{font-size:12.5px;font-weight:600;color:var(--text-400)}
+.step-item.is-active .step-label strong,.step-item.is-done .step-label strong{color:var(--text-900)}
+.step-label span{font-size:10.5px;color:var(--text-400)}
+.step-line{flex:1;height:2px;background:var(--border-soft);margin:0 6px 0 -2px;position:relative;top:-13px}
+.step-item.is-done + .step-item .step-line{background:var(--brand-solid)}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-card)}
+.onboard-card{padding:32px}
+.onboard-step{display:none}
+.onboard-step.is-active{display:block;animation:fadeUp .3s var(--ease)}
+.onboard-step h3{font-size:17px;margin-bottom:4px}
+.onboard-step p.hint{color:var(--text-600);font-size:13px;margin-bottom:22px}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.chip-group{margin-bottom:22px}
+.chip-group-head{display:flex;align-items:center;justify-content:between;gap:8px;margin-bottom:10px}
+.chip-group-head strong{font-size:13px;font-weight:600}
+.chip-input-wrap{
+  display:flex;flex-wrap:wrap;gap:7px;align-items:center;
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px;background:var(--surface-sunk);
+}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 6px 5px 12px;border-radius:var(--radius-pill);
+  background:var(--purple-100);color:var(--purple-900);font-size:12px;font-weight:600;
+}
+.chip.tone-magenta{background:var(--magenta-bg);color:var(--magenta-fg)}
+.chip button{width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center}
+.chip button:hover{background:rgba(0,0,0,.18)}
+.chip-input-wrap input{border:none;background:transparent;flex:1;min-width:140px;padding:5px;font-size:13px}
+.chip-input-wrap input:focus{outline:none}
+.suggest-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.suggest-chip{padding:5px 11px;border-radius:var(--radius-pill);border:1.3px dashed var(--border-soft);font-size:11.5px;color:var(--text-600);font-weight:600}
+.suggest-chip:hover{border-color:var(--purple-700);color:var(--purple-700);background:var(--purple-50)}
+
+.upload-zone{
+  border:1.8px dashed var(--border-soft);border-radius:var(--radius-md);padding:30px;text-align:center;
+  background:var(--surface-sunk);transition:border-color .15s,background .15s;
+}
+.upload-zone:hover{border-color:var(--purple-700);background:var(--purple-50)}
+.upload-zone svg{width:28px;height:28px;color:var(--purple-500);margin:0 auto 10px}
+.upload-zone strong{display:block;font-size:13.5px;margin-bottom:3px}
+.upload-zone span{font-size:12px;color:var(--text-400)}
+.upload-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.upload-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12.5px}
+.upload-item svg{width:16px;height:16px;color:var(--purple-700);flex-shrink:0}
+.upload-item .fname{font-weight:600;flex:1}
+.upload-item .fsize{color:var(--text-400);font-size:11px}
+
+.onboard-actions{display:flex;justify-content:space-between;margin-top:26px}

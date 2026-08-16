@@ -1,0 +1,141 @@
+/* ============================================================
+   3. TOPBAR / NAVEGAÇÃO PRINCIPAL (Telas = Abas)
+   ============================================================ */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  height:var(--topbar-h);
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 28px;
+  gap:28px;
+}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.brand-mark{
+  width:38px;height:38px;border-radius:11px;
+  background:linear-gradient(135deg,var(--purple-700),var(--purple-900));
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.brand-mark svg{width:20px;height:20px}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-text strong{font-family:var(--font-display);font-size:17px;font-weight:800;color:var(--purple-900)}
+.brand-text span{font-size:10.5px;color:var(--text-400);letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+
+.nav-center{flex:1;display:flex;justify-content:center;min-width:0}
+.tabs-nav{
+  display:flex;align-items:center;gap:3px;padding:4px;
+  background:var(--surface-sunk);border:1px solid var(--border);border-radius:var(--radius-pill);
+}
+.tab-btn{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:50%;
+  background:transparent;border:none;color:var(--text-400);
+  transition:background .15s var(--ease),color .15s var(--ease),box-shadow .15s var(--ease);
+}
+.tab-btn svg{width:18px;height:18px}
+.tab-btn:hover{background:var(--surface);color:var(--purple-700);box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.tab-btn.is-active{background:var(--brand-solid);color:#fff;box-shadow:0 5px 14px rgba(102,0,153,.32)}
+/* tooltip limpo, sem depender do title nativo do navegador */
+.tab-btn::after{
+  content:attr(data-tooltip);position:absolute;top:calc(100% + 11px);left:50%;
+  transform:translateX(-50%) translateY(-4px);
+  background:var(--brand-solid);color:#fff;font-size:11px;font-weight:600;
+  padding:6px 11px;border-radius:7px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .15s var(--ease),transform .15s var(--ease);z-index:60;
+}
+.tab-btn::before{
+  content:"";position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-bottom-color:var(--brand-solid);
+  opacity:0;transition:opacity .15s var(--ease);pointer-events:none;z-index:60;
+}
+.tab-btn:hover::after,.tab-btn:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
+.tab-btn:hover::before,.tab-btn:focus-visible::before{opacity:1}
+
+.topbar-user{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.user-menu{position:relative}
+.user-chip{
+  display:flex;align-items:center;gap:9px;padding:6px 10px 6px 6px;border-radius:var(--radius-pill);
+  background:var(--surface-sunk);border:1px solid var(--border);transition:border-color .15s,background .15s;
+}
+.user-chip:hover{border-color:var(--border-soft);background:var(--surface)}
+.user-menu.is-open .user-chip{border-color:var(--purple-700);background:var(--surface)}
+.user-menu.is-open .user-chip svg{transform:rotate(180deg)}
+.user-chip svg{transition:transform .15s var(--ease)}
+.user-dropdown{
+  position:absolute;top:calc(100% + 8px);right:0;min-width:170px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
+  box-shadow:0 16px 40px rgba(30,0,48,.16);padding:6px;
+  opacity:0;pointer-events:none;transform:translateY(-6px);
+  transition:opacity .15s var(--ease),transform .15s var(--ease);z-index:70;
+}
+.user-menu.is-open .user-dropdown{opacity:1;pointer-events:auto;transform:none}
+.user-dropdown-item{
+  display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;border-radius:8px;
+  font-size:13px;font-weight:600;color:var(--danger);
+}
+.user-dropdown-item svg{width:16px;height:16px}
+.user-dropdown-item:hover{background:var(--danger-bg)}
+
+/* item de tema dentro do menu do perfil — só aparece no celular,
+   onde o botão redondo da topbar fica oculto para não espremer as abas */
+.user-dropdown-theme{display:none;color:var(--text-600)}
+.user-dropdown-theme:hover{background:var(--purple-50);color:var(--purple-700)}
+.user-dropdown-sep{display:none;height:1px;background:var(--border);margin:5px 4px}
+
+.is-hidden{display:none !important}
+.avatar{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-weight:600;font-size:11.5px;color:#fff;
+  flex-shrink:0;
+}
+.user-chip .name{font-size:12.5px;font-weight:600}
+.user-chip .role{font-size:10.5px;color:var(--text-400)}
+
+/* ---- alternador de tema (claro/escuro) ---- */
+.theme-toggle{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:var(--surface-sunk);border:1px solid var(--border);color:var(--text-600);
+  transition:background .15s var(--ease),color .15s var(--ease),border-color .15s var(--ease);
+}
+.theme-toggle:hover{background:var(--purple-50);color:var(--purple-700);border-color:var(--purple-100)}
+.theme-toggle svg{width:17px;height:17px;transition:transform .3s var(--ease)}
+.theme-toggle:hover svg{transform:rotate(18deg)}
+/* tooltip reaproveitando o padrão da navegação */
+.theme-toggle::after{
+  content:attr(data-tooltip);position:absolute;top:calc(100% + 11px);left:50%;
+  transform:translateX(-50%) translateY(-4px);
+  background:var(--brand-solid);color:#fff;font-size:11px;font-weight:600;
+  padding:6px 11px;border-radius:7px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .15s var(--ease),transform .15s var(--ease);z-index:60;
+}
+.theme-toggle:hover::after,.theme-toggle:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* variante sobre o cartão de login (fundo claro, canto superior) */
+.theme-toggle-floating{
+  position:absolute;top:18px;right:18px;z-index:5;
+  background:var(--surface);box-shadow:var(--shadow-card);
+}
+.theme-toggle-floating::after{top:auto;bottom:calc(100% + 11px)}
+
+/* ============================================================
+   4. LAYOUT GERAL / TELAS
+   ============================================================ */
+main{max-width:1440px;margin:0 auto}
+.tela{display:none;animation:fadeUp .35s var(--ease)}
+.tela.is-active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.tela-head{padding:32px 32px 0}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--purple-700);background:var(--purple-50);border:1px solid var(--purple-100);
+  padding:4px 10px;border-radius:var(--radius-pill);margin-bottom:12px;
+}
+.tela-head h1{font-size:26px;margin-bottom:6px}
+.tela-head p.lede{color:var(--text-600);font-size:14.5px;max-width:640px}

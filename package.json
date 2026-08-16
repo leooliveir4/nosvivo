@@ -1,0 +1,13 @@
+{
+  "name": "nosvivo",
+  "version": "1.0.0",
+  "description": "NÓsVivo — Rede de Conhecimento Vivo. Protótipo de plataforma de mapeamento de capital intelectual.",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "node tests/smoke-test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}

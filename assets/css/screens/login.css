@@ -1,0 +1,88 @@
+/* ============================================================
+   6. TELA 1 — LOGIN (cartão compacto e centralizado)
+   ============================================================ */
+.login-wrap{
+  position:relative;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);padding:32px 20px;
+}
+.login-combo{
+  width:100%;max-width:800px;
+  display:grid;grid-template-columns:1fr 1fr;
+  border-radius:var(--radius-lg);overflow:hidden;
+  box-shadow:var(--shadow-pop);background:var(--surface);
+}
+.login-hero{
+  position:relative;overflow:hidden;
+  background:radial-gradient(120% 140% at 15% 10%,var(--brand-grad-a) 0%,var(--brand-grad-b) 48%,var(--brand-grad-c) 100%);
+  color:#fff;padding:44px 40px;display:flex;flex-direction:column;
+}
+.node-field{position:absolute;inset:0;opacity:.5}
+.node-field circle{fill:#fff;opacity:.55;transform-box:fill-box;transform-origin:center}
+.node-field line{stroke:#fff;stroke-width:1;opacity:.16}
+
+.login-hero-top{position:relative;z-index:2;display:flex;align-items:center;gap:13px}
+.login-hero-top .brand-mark{background:rgba(255,255,255,.14);backdrop-filter:blur(4px);width:52px;height:52px;border-radius:15px}
+.login-hero-top .brand-mark svg{width:27px;height:27px}
+.login-hero-top strong{font-family:var(--font-display);font-size:27px;font-weight:800}
+
+.login-hero-mid{
+  position:relative;z-index:2;flex:1;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:24px 0;
+}
+.login-hero-mid h1{color:#fff;font-size:23px;line-height:1.3;margin-bottom:12px;max-width:320px}
+.login-hero-mid p{font-size:12.5px;color:rgba(255,255,255,.78);line-height:1.6;max-width:300px}
+
+.login-panel{display:flex;align-items:center;justify-content:center;padding:36px 34px;background:var(--surface)}
+.login-card{width:100%;max-width:340px}
+.login-card h2{font-size:20px;margin-bottom:5px}
+.login-card p.sub{color:var(--text-600);font-size:12.5px;margin-bottom:20px}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--text-600);margin-bottom:6px}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-size:13.5px;background:var(--surface-sunk);transition:border-color .15s,background .15s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--purple-700);background:var(--surface)}
+.field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.link-inline{font-size:12.5px;color:var(--purple-700);font-weight:600}
+.link-inline:hover{text-decoration:underline}
+
+/* validação de formulário */
+.field.has-error input{border-color:var(--danger);background:var(--danger-bg)}
+.field-error{display:none;color:var(--danger);font-size:11.5px;font-weight:600;margin-top:6px;align-items:center;gap:5px}
+.field-error svg{width:12px;height:12px;flex-shrink:0}
+.field.has-error .field-error{display:flex}
+.field.shake input{animation:shake .32s linear}
+@keyframes shake{15%,85%{transform:translateX(-1px)}30%,70%{transform:translateX(3px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}}
+
+.field-password-wrap{position:relative}
+.field-password-wrap input{padding-right:42px}
+.pw-toggle{position:absolute;right:6px;top:6px;width:29px;height:29px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--text-400)}
+.pw-toggle:hover{background:var(--surface);color:var(--purple-700)}
+.pw-toggle svg{width:16px;height:16px}
+
+.form-alert{
+  display:none;align-items:flex-start;gap:9px;padding:11px 13px;border-radius:var(--radius-sm);
+  background:var(--danger-bg);border:1px solid var(--danger-border);color:var(--danger);font-size:12.5px;font-weight:600;
+  margin-bottom:16px;line-height:1.5;
+}
+.form-alert.is-shown{display:flex}
+.form-alert svg{width:15px;height:15px;flex-shrink:0;margin-top:1px}
+
+.demo-hint{
+  display:flex;gap:9px;align-items:flex-start;padding:12px 13px;border-radius:var(--radius-sm);
+  background:var(--purple-50);border:1px solid var(--purple-100);margin-bottom:20px;
+}
+.demo-hint svg{width:15px;height:15px;color:var(--purple-700);flex-shrink:0;margin-top:1px}
+.demo-hint p{font-size:11.5px;color:var(--purple-900);line-height:1.55}
+.demo-hint code{background:rgba(102,0,153,.1);padding:1px 5px;border-radius:4px;font-family:var(--font-mono);font-size:11px}
+
+.spinner{width:15px;height:15px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.login-foot{margin-top:22px;padding-top:18px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-start}
+.login-foot svg{width:15px;height:15px;color:var(--text-400);margin-top:1px}
+.login-foot span{font-size:11.5px;color:var(--text-400);line-height:1.5}

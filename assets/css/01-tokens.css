@@ -1,0 +1,178 @@
+/* ============================================================
+   1. DESIGN TOKENS — identidade Vivo
+   ------------------------------------------------------------
+   O tema é controlado pelo atributo data-theme no <html>:
+     <html data-theme="light">  (padrão)
+     <html data-theme="dark">
+   Toda cor de superfície, texto e borda é lida daqui, então
+   alternar o tema não exige tocar em nenhum outro arquivo.
+   ============================================================ */
+:root,
+[data-theme="light"]{
+  /* marca — constante nos dois temas */
+  --purple-900:#3B0060;
+  --purple-800:#4E0080;
+  --purple-700:#660099;
+  --purple-600:#7A1FB0;
+  --purple-500:#9645C4;
+  --purple-100:#F1E4FA;
+  --purple-50:#F8F2FC;
+
+  --magenta:#EB0029;
+  --pink:#FF007A;
+
+  /* superfícies */
+  --bg:#F5F5F7;
+  --surface:#FFFFFF;
+  --surface-sunk:#FBFAFC;
+
+  /* texto */
+  --text-900:#222222;
+  --text-600:#4A4A4A;
+  --text-400:#83808C;
+  --text-inverse:#FFFFFF;
+
+  /* bordas */
+  --border:#E2E8F0;
+  --border-soft:#D1D1D6;
+
+  /* estados */
+  --success:#187A54;
+  --success-bg:#E7F6EF;
+  --success-border:#BFE6D2;
+  --warning:#B4650A;
+  --warning-bg:#FDF1E1;
+  --danger:#D4213C;
+  --danger-bg:#FCE8EA;
+  --danger-border:#F6C7CE;
+
+  /* chip magenta (regras de negócio) */
+  --magenta-bg:#FCE4EA;
+  --magenta-fg:#9C0026;
+  --magenta-border:#F6C7CE;
+
+  /* skeleton loading */
+  --skeleton-a:#EDEDF1;
+  --skeleton-b:#F6F5F8;
+
+  /* elevação */
+  --shadow-card:0 2px 8px rgba(0,0,0,0.06);
+  --shadow-pop:0 20px 60px rgba(59,0,96,0.25);
+  --shadow-hover:0 14px 32px rgba(59,0,96,.14);
+
+  /* heatmap do painel gestor (canal RGB usado com alpha variável) */
+  --heat-rgb:102,0,153;
+
+  /* ---- superfícies de MARCA ----------------------------------
+     Usadas onde há texto branco por cima (botões cheios, badges,
+     headers de modal, heros). Precisam permanecer escuras nos
+     DOIS temas, senão o texto branco fica ilegível. Por isso são
+     tokens separados dos --purple-* (que invertem no escuro).   */
+  --brand-solid:#660099;
+  --brand-solid-hover:#4E0080;
+  --brand-grad-a:#7A1FB0;
+  --brand-grad-b:#4E0080;
+  --brand-grad-c:#3B0060;
+  --accent-solid:#EB0029;
+  --accent-solid-hover:#C50022;
+
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------
+   TEMA ESCURO
+   Fundo em roxo-carvão (não preto puro) para manter o DNA Vivo.
+   Os roxos da marca são clareados para preservar contraste
+   legível sobre superfícies escuras.
+   ------------------------------------------------------------ */
+[data-theme="dark"]{
+  --purple-900:#E9D5F7;
+  --purple-800:#DCC0F0;
+  --purple-700:#B888E0;
+  --purple-600:#A46FD4;
+  --purple-500:#8E57C2;
+  --purple-100:#3A2450;
+  --purple-50:#2A1A3C;
+
+  --magenta:#FF4D6A;
+  --pink:#FF5CA8;
+
+  --bg:#141019;
+  --surface:#1E1826;
+  --surface-sunk:#181322;
+
+  --text-900:#F2EFF6;
+  --text-600:#BDB5C8;
+  --text-400:#8C8399;
+  --text-inverse:#1E1826;
+
+  --border:#332A42;
+  --border-soft:#443853;
+
+  --success:#4ED4A0;
+  --success-bg:#16302A;
+  --success-border:#2A5A48;
+  --warning:#E8A54B;
+  --warning-bg:#3A2A16;
+  --danger:#FF6B85;
+  --danger-bg:#3A1A22;
+  --danger-border:#5C2A36;
+
+  --magenta-bg:#3D1A26;
+  --magenta-fg:#FF9DB0;
+  --magenta-border:#5C2A3A;
+
+  --skeleton-a:#241D30;
+  --skeleton-b:#2E2640;
+
+  --shadow-card:0 2px 8px rgba(0,0,0,0.4);
+  --shadow-pop:0 20px 60px rgba(0,0,0,0.6);
+  --shadow-hover:0 14px 32px rgba(0,0,0,.5);
+
+  --heat-rgb:184,136,224;
+
+  /* superfícies de marca — levemente clareadas em relação ao tema
+     claro para não "sumirem" no fundo escuro, mas ainda escuras o
+     suficiente para sustentar texto branco por cima. */
+  --brand-solid:#7B3BB5;
+  --brand-solid-hover:#8E4CC9;
+  --brand-grad-a:#5A2A85;
+  --brand-grad-b:#3A1A5C;
+  --brand-grad-c:#241040;
+  --accent-solid:#C41F3E;
+  --accent-solid-hover:#D93350;
+
+  color-scheme: dark;
+}
+
+/* tokens estruturais — iguais nos dois temas */
+:root{
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:22px;
+  --radius-pill:999px;
+
+  --font-display:'Sora',ui-sans-serif,system-ui,sans-serif;
+  --font-body:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+
+  --topbar-h:72px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+}
+
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text-900);
+  line-height:1.5;
+  min-height:100vh;
+  transition:background .25s var(--ease), color .25s var(--ease);
+}
+
+:focus-visible{outline:2.5px solid var(--pink);outline-offset:2px;border-radius:4px}
+
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:-0.01em;color:var(--text-900)}
